@@ -1,0 +1,190 @@
+
+<!-- saved from url=(0064)https://cs.middlesexcc.edu/~schatz/csc236/handouts/heapsort.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>CSC236 Data Structures - Heap Sort</title>
+<style type="text/css">
+<!--
+   body {font-family:Verdana, Arial, "sans-serif"}
+   pre,tt {font-family:"Courier New", "OCR A Extended", Serif}
+   h1,h2,h3,h4 {text-align:center ; margin-top:+0.5cm}
+   td, th {font-family:Verdana, Arial, "sans-serif"}
+-->
+</style></head>
+
+<body bgcolor="white">
+
+<h2>Heaps and Heap Sort</h2>
+<br>
+
+<h3>Heaps</h3>
+
+<p>There are two types of heaps: minheaps and maxheaps. Both are complete binary trees.</p>
+
+<p>A <i>maxheap</i> is a complete binary tree where, for each node, the value in the
+node is greater than the values in the node's children. There is no restriction
+on the relationship of the values in the children, like there is in a BST.</p>
+
+<p>A <i>minheap</i> is a complete binary tree where, for each node, the value in the
+node is less than the values in the node's children. There is no restriction
+on the relationship of the values in the children, like there is in a BST.</p>
+
+<p>So a heap has two requirements: the shape requirement (it must be a complete
+binary tree) and the ordering requirement, which is different for minheaps and
+maxheaps. Here are two sample heaps. Notice that the left child and right
+child of a node do not have to follow any rule regarding which is larger
+or smaller.</p>
+
+<h4>Maxheap</h4>
+
+<img src="./CSC236 Data Structures - Heap Sort_files/heap.max.png">
+
+<h4>Minheap</h4>
+
+<img src="./CSC236 Data Structures - Heap Sort_files/heap.min.png">
+
+<p>For the rest of this handout we will discuss maxheaps.</p>
+
+<h4> Insert</h4>
+
+<p>To insert into a heap, we add the new element as a new rightmost leaf. This preserves the shape
+needed for the heap, but the new value may violate the ordering property of the heap. If the new
+value is greater than the parent, we swap it with the parent, repeating until the new value
+is in a valid position. We call this operation "sift up".</p>
+
+<img src="./CSC236 Data Structures - Heap Sort_files/heap.insert.png">
+
+<p>Sift up works on the path from the new node to the root. At each step we need to compare the new node
+and the parent, so that is one comparison at each step. In the worst case we must sift all the
+way up to the root, which is log(N) steps.</p>
+
+<h4>Delete</h4>
+
+<p>We delete from the root of the heap. This leaves a hole that must be filled. To preserve the heap
+shape, we replace the root item with the item from the rightmost leaf, and then delete that leaf.
+This will put a value in the root, call it v, which is too small to satisfy the heap ordering property. To
+correct this problem we perform "sift down" on v. In sift down we swap v with the larger of
+its children. This makes the root value valid, but v may still be smaller than its children, so we
+must repeat the sift down until v is in a valid position.</p>
+
+<img src="./CSC236 Data Structures - Heap Sort_files/heap.delete.png">
+
+<p>Sift down works on the path from the root to a leaf. At each stage we need to compare the children
+to find which is larger, and then compare the larger child to the parent. If the parent is smaller then
+we need to swap it with the larger child. So that is two comparisons at each step. In the worst case
+we must sift all the way down to a leaf, which is log N steps. Thus we see that insert and delete
+are both O(log N).</p>
+
+<h3>Storing Heap in an Array</h3>
+
+<p>Since the heap is a complete binary tree it is easy to store it in an array:</p>
+
+<ul>
+<li>the root is in arr[0]</li>
+<li>for a node in location k, the left child is in location 2k+1, the right child is in
+location 2k+2</li>
+<li>the parent of the node at location k is in location (k-1)/2 (using integer division)
+</li></ul>
+
+<img src="./CSC236 Data Structures - Heap Sort_files/heap.png">
+
+<pre>323  252  282  121  131  222  141   66  111   85
+[0]  [1]  [2]  [3]  [4]  [5]  [6]  [7]  [8]  [9]
+</pre>
+
+<h3>Heap Sort</h3>
+
+<p>Heapsort uses a maxheap in an array. The first phase builds the heap in the
+array. The second phase is like selection sort: each pass takes the largest (the
+root of the heap, in array[0]), removes it from the heap and moves it to the end
+of the array. After the heap is fixed up this step is repeated, removing
+the new root of the heap and moving it to the second-from-the-end of the array.
+This is repeated until the whole array is sorted.</p>
+
+<h4>Build Heap</h4>
+
+<p>The heap is built from the bottom up. The leaves are valid heaps, so the
+first stage is to make heaps out of the parents of the leaves, and then
+their parents, until the whole array has been turned into a heap. To make
+heaps we use the same sift down function described above. In the code
+below, start is the subscript of the root of the heap (the value that
+needs to sift down), and end is the subscript of the last element in
+the heap.</p>
+
+<pre>   siftDown(arr, start, end) {
+      root = start
+      while (root * 2 + 1 &lt;= end) {
+         lchild = root * 2 + 1            // subscript of left child
+         swap = root
+         if (arr[swap] &lt; arr[lchild])
+            swap = lchild                 // should swap root &amp; left child
+         if (lchild + 1 &lt;= end &amp;&amp; arr[swap] &lt; arr[lchild+1])
+            swap = lchild + 1              // should swap root &amp; right child
+         if (swap != root) {              // if one of children is greater
+            swap(arr[root],arr[swap])     // swap root &amp; larger child
+            root = swap
+         }
+         else
+            return
+   }
+</pre>
+
+<p>One call to siftdown takes care of moving the root value to a valid location
+in one heap. To build a heap in the array we need to call it for all of the
+internal node positions of the heap. It can be proved that half of the nodes
+in a complete tree are leaves. This means that for an array of N nodes
+the non-leaf nodes are in array locations 0 through size/2-1. We call siftdown
+for each of the non-leaves, starting from the lowest non-leaves and working up
+to the root.</p>
+
+<pre>   heapify(arr, size) {
+      start = size/2 - 1                   // last non leaf
+      while (start &gt;= 0) {
+         siftdown(arr, start, size-1)
+         start = start - 1
+      }
+   }
+</pre>
+
+<p>Once the heap has been built, we can sort as follows:</p>
+
+<ol>
+<li>swap first and last (move largest to end)
+</li><li>fix heap: sift new root down till in valid position, cutting last element
+out of the heap: siftdown(arr, 0, last-1)
+</li><li>repeat, cutting off the last item each time
+</li></ol>
+
+<pre>   heapsort(arr, size) {
+      heapify(arr,size)
+      last = size -1                       // subscript of last item
+      while (last &gt; 0) {
+         swap(arr[last], arr[0])
+         last = last - 1
+         siftdown(arr, 0, last)
+      }
+   }
+</pre>
+
+<br>
+
+<hr>
+
+<p>
+
+<font face="Verdana, Arial,Sans-Serif" size="-1">
+
+<strong>
+<a href="mailto:emmi_schatz@middlesexcc.edu">Email Me</a> |
+<a href="https://cs.middlesexcc.edu/~schatz/officehours.html">Office Hours</a> |
+<a href="https://cs.middlesexcc.edu/~schatz/index.html">My Home Page</a> |
+<a href="http://www.middlesexcc.edu/academi/csc/index.html">Department Home</a> |
+<a href="http://www.middlesexcc.edu/">MCC Home Page</a>
+       <br><br>
+       © Copyright Emmi Schatz 2008
+</strong>
+
+</font>
+</p>
+
+
+</body></html>
