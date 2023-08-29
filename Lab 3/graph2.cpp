@@ -125,3 +125,25 @@ int main() {
 	q.display();
 	return 0;
 }
+
+// Input Test Case:
+// Vertices: 0, 1, 2, 3, 4
+// Edges: (0, 1), (0, 2), (1, 3), (1, 4), (2, 4), (3, 4)
+
+// Test Case:
+
+// Enter the number of vertices: 5
+// Enter the number of edges: 6
+// Enter the source vertex: 0
+// Enter the end vertex: 1
+// Enter the source vertex: 0
+// Enter the end vertex: 2
+// Enter the source vertex: 1
+// Enter the end vertex: 3
+// Enter the source vertex: 1
+// Enter the end vertex: 4
+// Enter the source vertex: 2
+// Enter the end vertex: 4
+// Enter the source vertex: 3
+// Enter the end vertex: 4
+// Enter the start vertex: 0

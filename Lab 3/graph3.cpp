@@ -133,3 +133,21 @@ int main() {
 	s.display();
 	return 0;
 }
+
+// Input Test Case
+// Vertices: 0, 1, 2, 3
+// Edges: (0, 1), (0, 2), (1, 2), (2, 3)
+
+// Test Case:
+
+// Enter the number of vertices: 4
+// Enter the number of edges: 4
+// Enter the source vertex: 0
+// Enter the end vertex: 1
+// Enter the source vertex: 0
+// Enter the end vertex: 2
+// Enter the source vertex: 1
+// Enter the end vertex: 2
+// Enter the source vertex: 2
+// Enter the end vertex: 3
+// Enter the start vertex: 0
