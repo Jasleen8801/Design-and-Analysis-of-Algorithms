@@ -1,37 +1,35 @@
-// Coin Change Problem
-// A amount of money, d[i] array with denomination, c[i][j]-min no of coins to make change for i using first j denominations
+// Coin Change DP
+// Minimization Problem
+// Bottom Up Approach
 
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-int coinChange(int coins[], int n, int amount){
-	int c[amount+1][n+1];
-	for(int i=0; i<=amount; i++)
-		c[i][0] = INT_MAX;
-	for(int i=0; i<=n; i++)
-		c[0][i] = 0;
-	for(int i=1; i<=amount; i++){
-		for(int j=1; j<=n; j++){
-			if(i-coins[j-1] >= 0)
-				c[i][j] = min(c[i][j-1], 1+c[i-coins[j-1]][j]);
-			else
-				c[i][j] = c[i][j-1];
+int minCoinsDP(int coin[], int amount, int n) {
+	int dp[n + 1][amount + 1];
+	for(int i=0; i<=n; i++) dp[i][0] = 0;
+	for(int j=1; j<=amount; j++) dp[0][j] = INT_MAX - 1;
+
+	for(int i=1; i<=n; i++){
+		for(int j=1; j<=amount; j++){
+			if(coin[i-1] > j) dp[i][j] = dp[i-1][j];
+			else dp[i][j] = min(dp[i-1][j], 1 + dp[i][j-coin[i-1]]);
 		}
 	}
-	return c[amount][n];
+
+  return dp[n][amount];
 }
 
 int main() {
-	int n;
-	cout << "Enter number of coins: ";
+	int n, amount;
+	cout << "Enter the number of coins: ";
 	cin >> n;
-	int coins[n];
-	cout << "Enter coins: ";
-	for(int i=0; i<n; i++)
-		cin >> coins[i];
-	int amount;
-	cout << "Enter amount: ";
+	cout << "Enter the amount: ";
 	cin >> amount;
-	cout << "Minimum number of coins required: " << coinChange(coins, n, amount) << endl;
-	return 0;
+	int coin[n];
+	cout << "Enter the coins: ";
+	for(int i=0; i<n; i++) cin >> coin[i];
+  cout << minCoinsDP(coin, amount, n) << endl;
+
+  return 0;
 }
