@@ -1,6 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+void printOptimalParenthesis(int S[][101], int i, int j) {
+	if (i == j)
+		cout << "A" << i;
+	else {
+		cout << "(";
+		printOptimalParenthesis(S, i, S[i][j]);
+		printOptimalParenthesis(S, S[i][j] + 1, j);
+		cout << ")";
+	}
+}
+
 int main(){
 	int n;
 	cout << "Enter number of matrices: ";
@@ -50,6 +61,8 @@ int main(){
 		cout << endl;
 	}
 
+	cout << "Optimal parenthesization: ";
+	printOptimalParenthesis(S, 1, n);
 	// TODO: Print the optimal parenthesization
 	return 0;
 }
