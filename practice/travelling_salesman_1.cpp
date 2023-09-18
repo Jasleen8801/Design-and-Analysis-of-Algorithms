@@ -1,59 +1,66 @@
 #include <iostream>
-
 using namespace std;
 
-int ary[10][10], comp[10], n, cost = 0;
+const int MaxVillages = 10;  // Maximum number of villages
 
-int least(int c){
-	int i, nc = 999;
-	int min = 999, kmin;
+int costMatrix[MaxVillages][MaxVillages];  // Cost matrix to store travel costs
+int visited[MaxVillages];  // Array to track visited villages
+int numVillages, totalCost = 0;  // Number of villages and total travel cost
 
-	for (i = 0; i < n; i++){
-		if ((ary[c][i] != 0) && (comp[i] == 0))
-			if (ary[c][i] + ary[i][c] < min){
-				min = ary[i][0] + ary[c][i];
-				kmin = ary[c][i];
-				nc = i;
-			}
-	}
+// Function to find the nearest unvisited village from a given village
+int findNearestUnvisitedVillage(int currentVillage) {
+    int i, nearestVillage = -1;
+    int minCost = 999, tempCost;
 
-	if (min != 999)
-		cost += kmin;
+    for (i = 0; i < numVillages; i++) {
+        if ((costMatrix[currentVillage][i] != 0) && (visited[i] == 0)) {
+            tempCost = costMatrix[currentVillage][i];
+            if (tempCost < minCost) {
+                minCost = tempCost;
+                nearestVillage = i;
+            }
+        }
+    }
 
-	return nc;
+    if (nearestVillage != -1)
+        totalCost += minCost;
+
+    return nearestVillage;
 }
 
-void mincost(int city){
-	int i, ncity;
-	comp[city] = 1;
+// Function to find the minimum cost Hamiltonian circuit starting from a given city
+void findMinimumCostHamiltonianCircuit(int currentCity) {
+    int nextCity;
+    visited[currentCity] = 1;
 
-	cout << city + 1 << "--->";
-	ncity = least(city);
+    cout << "Visiting City " << currentCity + 1 << " ---> ";
+    nextCity = findNearestUnvisitedVillage(currentCity);
 
-	if (ncity == 999){
-		ncity = 0;
-		cout << ncity + 1;
-		cost += ary[city][ncity];
-		return;
-	}
-	mincost(ncity);
+    if (nextCity == -1) {
+        nextCity = 0;
+        cout << "Returning to City 1" << endl;
+        totalCost += costMatrix[currentCity][nextCity];
+        return;
+    }
+    
+    findMinimumCostHamiltonianCircuit(nextCity);
 }
 
 int main() {
-	cout << "Enter the number of villages: ";
-	cin >> n;
+    cout << "Enter the number of villages: ";
+    cin >> numVillages;
 
-	cout << "\nEnter the Cost Matrix\n";
-	for (int i = 0; i < n; i++){
-		cout << "\nEnter Elements of Row: " << i + 1 << "\n";
-		for (int j = 0; j < n; j++)
-			cin >> ary[i][j];
-		comp[i] = 0;
-	}
+    cout << "\nEnter the Cost Matrix\n";
+    for (int i = 0; i < numVillages; i++) {
+        cout << "\nEnter Costs for Village " << i + 1 << "\n";
+        for (int j = 0; j < numVillages; j++)
+            cin >> costMatrix[i][j];
+        visited[i] = 0;
+    }
 
-	cout << "\n\nThe Path is:\n";
-	mincost(0); 
+    cout << "\n\nThe Path is:\n";
+    findMinimumCostHamiltonianCircuit(0); 
 
-	cout << "\n\nMinimum cost is " << cost;
-	return 0;
+    cout << "\n\nMinimum cost of the circuit is " << totalCost << endl;
+    return 0;
 }
