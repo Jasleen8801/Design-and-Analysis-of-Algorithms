@@ -3,6 +3,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int solve(int cost[][n], int n){
+  
+}
+
 int main(){
   int n;
   cout << "Enter the no of cities: ";
