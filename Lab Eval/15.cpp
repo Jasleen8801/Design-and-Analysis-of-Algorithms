@@ -13,12 +13,12 @@ bool isSafe(int v, int **adj, int *colors, int nv, int c){
 bool backtrack(int **adj, int *colors, int v, int nv, int m){
   if(v == nv)
     return true;
-  for(int c=1; c<=m; c++){
-    if(isSafe(v, adj, colors, nv, c)){
-      colors[v] = c;
-      if(backtrack(adj, colors, v+1, nv, m))
-        return true;
-      colors[v] = -1;
+  for(int c=1; c<=m; c++){ // try all colors
+    if(isSafe(v, adj, colors, nv, c)){ // if color is safe
+      colors[v] = c; // assign color
+      if(backtrack(adj, colors, v+1, nv, m)) // recurse
+        return true; // if solution found
+      colors[v] = -1; // else backtrack
     }
   }
   return false;

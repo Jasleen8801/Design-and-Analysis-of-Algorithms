@@ -47,7 +47,7 @@ void TSPBranchAndBound(int **cost, int n){
   while(true){
     int i; // current path length
     for(i = 0; i < n; i++)
-      if(path[i] == -1)
+      if(path[i] == -1) // if current city is not connected to any city
         break;
     if(i == n){
       int currCost = 0; // current cost

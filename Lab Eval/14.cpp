@@ -7,12 +7,12 @@ void sequentialColoring(int **adj, int nv, int ne){
   int *colors = new int[nv];
   for(int i=0; i<nv; i++)
     colors[i] = -1;
-  for(int i=0; i<nv; i++){
+  for(int i=0; i<nv; i++){ // for each vertex
     int j;
-    for(j=1; j<=nv; j++){
+    for(j=1; j<=nv; j++){ // find a color
       bool colorUsed = false;
-      for(int k=0; k<nv; k++){
-        if(adj[i][k] && colors[k] == j){
+      for(int k=0; k<nv; k++){ // check if color is used
+        if(adj[i][k] && colors[k] == j){ // if color is used
           colorUsed = true;
           break;
         }

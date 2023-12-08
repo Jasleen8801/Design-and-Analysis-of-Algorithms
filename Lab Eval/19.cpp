@@ -8,17 +8,17 @@ struct Edge {
 };
 
 bool isCycle(Edge *edges, int ne, int nv){
-  int *parent = new int[nv];
+  int *parent = new int[nv]; // parent array
   for(int i=0; i<nv; i++)
-    parent[i] = i;
-  for(int i=0; i<ne; i++){
-    int u = edges[i].u, v = edges[i].v;
-    int pu = parent[u], pv = parent[v];
-    if(pu == pv)
+    parent[i] = i; // initialize parent array
+  for(int i=0; i<ne; i++){ // for each edge
+    int u = edges[i].u, v = edges[i].v; // get vertices
+    int pu = parent[u], pv = parent[v]; // get parents
+    if(pu == pv) // if parents are same
       return true;
-    for(int j=0; j<nv; j++)
-      if(parent[j] == pv)
-        parent[j] = pu;
+    for(int j=0; j<nv; j++) // update parent array
+      if(parent[j] == pv) // if parent is pv
+        parent[j] = pu; // make parent as pu
   }
   return false;
 }
@@ -26,11 +26,11 @@ bool isCycle(Edge *edges, int ne, int nv){
 void connectGraph(Edge *edges, int ne, int nv, Edge *ans){
   sort(edges, edges+ne, [](Edge a, Edge b){
     return a.w < b.w;
-  });
-  int count = 0;
-  for(int i=0; i<ne; i++){
-    ans[count++] = edges[i];
-    if(!isCycle(ans, count, nv)){
+  }); // sort edges by weight
+  int count = 0; // count of edges
+  for(int i=0; i<ne; i++){ // for each edge
+    ans[count++] = edges[i]; // add edge to ans
+    if(!isCycle(ans, count, nv)){ 
       cout << edges[i].u << " " << edges[i].v << endl;
       return;
     }

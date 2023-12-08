@@ -29,9 +29,9 @@ int main(){
   }
   for(int i=0; i<=n; i++)
     M[i][i] = 0;
-  for(int l=2; l<=n; l++){
-    for(int i=1; i<=n-l+1; i++){
-      int j = i+l-1;
+  for(int l=2; l<=n; l++){ // l is the chain length
+    for(int i=1; i<=n-l+1; i++){ // i is the start index
+      int j = i+l-1; // j is the end index
       M[i][j] = INT_MAX;
       for(int k=i; k<=j-1; k++){
         int q = M[i][k] + M[k+1][j] + d[i-1]*d[k]*d[j];

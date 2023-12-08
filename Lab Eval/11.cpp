@@ -30,12 +30,12 @@ int main(){
   }
   int start;
   cin >> start;
-  int u = start;
+  int u = start; // start vertex
   cout << u << " ";
-  vis[u] = 1;
+  vis[u] = 1; // mark start vertex as visited
   while(countEdges(u, graph, vis, nv)){
-    int v = -1;
-    for(int i=0; i<nv; i++){
+    int v = -1; // next vertex
+    for(int i=0; i<nv; i++){  // find next vertex
       if(graph[u][i] && !vis[i]){
         if(countEdges(i, graph, vis, nv) == 1){
           v = i;
@@ -43,10 +43,10 @@ int main(){
         }
       }
     }
-    if(v == -1){
-      for(int i=0; i<nv; i++){
+    if(v == -1){ // if no next vertex found
+      for(int i=0; i<nv; i++){ 
         if(graph[u][i] && !vis[i]){
-          v = i;
+          v = i; // choose any vertex
           break;
         }
       }

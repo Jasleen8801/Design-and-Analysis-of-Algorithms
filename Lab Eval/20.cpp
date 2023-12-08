@@ -25,25 +25,25 @@ int main(){
   Edge *edges = new Edge[ne];
   for(int i=0; i<ne; i++)
     cin >> edges[i].u >> edges[i].v >> edges[i].w;
-  int start;
+  int start; // start vertex
   cin >> start;
-  table[start].dist = 0;
+  table[start].dist = 0; // distance of start vertex is 0
   while(true){
-    int v = -1;
+    int v = -1; // next vertex
     for(int i=0; i<nv; i++){
-      if(!table[i].known && (v == -1 || table[i].dist < table[v].dist))
-        v = i;
+      if(!table[i].known && (v == -1 || table[i].dist < table[v].dist)) // find next vertex
+        v = i; // choose vertex with minimum distance
     }
-    if(v == -1)
+    if(v == -1) // if no next vertex found
       break;
-    table[v].known = true;
+    table[v].known = true; // mark vertex as known
     for(int i=0; i<ne; i++){
-      if(edges[i].u == v){
-        int w = edges[i].w;
-        int u = edges[i].v;
+      if(edges[i].u == v){ // for each edge from v
+        int w = edges[i].w; // get weight
+        int u = edges[i].v; // get vertex
         if(table[u].dist > table[v].dist + w){
-          table[u].dist = table[v].dist + w;
-          table[u].path = v;
+          table[u].dist = table[v].dist + w; // update distance
+          table[u].path = v; // update path
         }
       }
     }

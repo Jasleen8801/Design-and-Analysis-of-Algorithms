@@ -5,13 +5,13 @@ using namespace std;
 
 void compute_prefix_func(char *P, int m, int *pi){
   pi[0] = 0;
-  int k = 0;
-  for(int q=1; q<m; q++){
+  int k = 0; // k is the length of the longest prefix of P[0..q-1] that is also a suffix of P[0..q-1]
+  for(int q=1; q<m; q++){ // q is the index of the pattern
     while(k>0 && P[k]!=P[q]){
-      k = pi[k];
+      k = pi[k]; // pi[k] is the length of the longest prefix of P[0..k-1] that is also a suffix of P[0..q-1]
     }
     if(P[k]==P[q]){
-      k++;
+      k++; // k is the length of the longest prefix of P[0..q-1] that is also a suffix of P[0..q-1]
     }
     pi[q] = k;
   }
